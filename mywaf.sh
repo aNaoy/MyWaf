@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function usage {
-    echo "$0 [add VHOST IP] [del VHOST]"
+    echo "$0 [add VHOST IP | del VHOST]"
 }
 
 function addVhost {
