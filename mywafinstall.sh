@@ -27,11 +27,11 @@ function installMyWaf {
         echo "* - nofile 65536" > /etc/security/limits.conf
         # Nginx + Naxsi
         echo "[*] - Installation de nginx & naxsi"
-        echo "deb http://backports.debian.org/debian-backports squeeze-backports main" >> /etc/apt/sources.list
+        echo "deb http://ftp.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
         apt-get update  
-        apt-get -y --force-yes -t squeeze-backports install nginx-naxsi
+        apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
 		echo "[*] - Installation de MyWaf"
-		if [ ! -d '/usr/local/mywaf']; then
+		if [ ! -d /usr/local/mywaf]; then
 			mkdir -p /usr/local/mywaf
 		fi
 		apwd=`pwd`
