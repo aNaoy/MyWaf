@@ -31,7 +31,7 @@ function installMyWaf {
         apt-get update  
         apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
 		echo "[*] - Installation de MyWaf"
-		if [ ! -d /usr/local/mywaf]; then
+		if [ ! -d /usr/local/mywaf ]; then
 			mkdir -p /usr/local/mywaf
 		fi
 		apwd=`pwd`
