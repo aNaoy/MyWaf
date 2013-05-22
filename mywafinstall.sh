@@ -36,10 +36,10 @@ function installMyWaf {
 		fi
 		apwd=`pwd`
 		cd /usr/local/mywaf
-		wget https://raw.github.com/aNaoy/mywaf_downloads/master/mywaf.sh
-		wget https://raw.github.com/aNaoy/mywaf_downloads/master/sysctl.conf
-		wget https://raw.github.com/aNaoy/mywaf_downloads/master/vhost.tpl
-		wget https://raw.github.com/aNaoy/mywaf_downloads/master/README.md
+		wget https://raw.github.com/aNaoy/MyWaf/master/mywaf.sh
+		wget https://raw.github.com/aNaoy/MyWaf/master/sysctl.conf
+		wget https://raw.github.com/aNaoy/MyWaf/master/vhost.tpl
+		wget https://raw.github.com/aNaoy/MyWaf/master/README.md
 		chmod +x mywaf.sh
 		ln -s mywaf.sh /usr/local/bin/
 		cd apwd
