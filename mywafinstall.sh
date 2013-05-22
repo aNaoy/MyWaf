@@ -14,28 +14,41 @@
 # If not, see http://www.gnu.org/licenses/.
 
 function installMyWaf {
-        echo "Creation du WAF :"
+        echo "[*] Installation du WAF :"
         # packages
-        echo "- Installation des packages"
+        echo "[*] - Installation des packages"
         apt-get -y purge exim4-base exim4-config exim4-daemon-light
         apt-get install -y tcpdump portmap nfs-server
         apt-get install -y libfile-tail-perl
         apt-get -y install python-dev python-pip
         pip install glances
         # optimisations
-        echo "- Optimisations systeme"
+        echo "[*] - Optimisations systeme"
         echo "* - nofile 65536" > /etc/security/limits.conf
         # Nginx + Naxsi
-        echo "- Installation de nginx & naxsi"
+        echo "[*] - Installation de nginx & naxsi"
         echo "deb http://backports.debian.org/debian-backports squeeze-backports main" >> /etc/apt/sources.list
         apt-get update  
         apt-get -y --force-yes -t squeeze-backports install nginx-naxsi
+		echo "[*] - Installation de MyWaf"
+		if [ ! -d '/usr/local/mywaf']; then
+			mkdir -p /usr/local/mywaf
+		fi
+		apwd=`pwd`
+		cd /usr/local/mywaf
+		wget https://raw.github.com/aNaoy/mywaf_downloads/master/mywaf.sh
+		wget https://raw.github.com/aNaoy/mywaf_downloads/master/sysctl.conf
+		wget https://raw.github.com/aNaoy/mywaf_downloads/master/vhost.tpl
+		wget https://raw.github.com/aNaoy/mywaf_downloads/master/README.md
+		chmod +x mywaf.sh
+		ln -s mywaf.sh /usr/local/bin/
+		cd apwd
+		echo "[*] - Configuration et optimisation"
 		# Optimisation de nginx
         echo 'ULIMIT="-n 65536"' >> /etc/default/nginx
         ## Netfilter / FW / iptables
         apt-get -y install iptables module-assistant xtables-addons-common;
         module-assistant --verbose --text-mode auto-install xtables-addons;
-        echo "- Installation des services pour le monitoring"		
         # No DNS
         update-rc.d bind9 remove
         # Hostname
@@ -45,3 +58,10 @@ function installMyWaf {
         ## Ajout de la whitelist WAF
         echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
 }
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+installMyWaf
