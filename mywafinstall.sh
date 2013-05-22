@@ -16,12 +16,8 @@
 function installMyWaf {
         echo "[*] Installation du WAF :"
         # packages
-        echo "[*] - Installation des packages"
-        apt-get -y purge exim4-base exim4-config exim4-daemon-light
-        apt-get install -y tcpdump portmap nfs-server
-        apt-get install -y libfile-tail-perl
-        apt-get -y install python-dev python-pip
-        pip install glances
+        echo "[*] - Installation des packages d'administration"
+		apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap nfs-server && apt-get install -y libfile-tail-perl && apt-get -y install python-dev python-pip && pip install glances
         # optimisations
         echo "[*] - Optimisations systeme"
         echo "* - nofile 65536" > /etc/security/limits.conf
