@@ -48,7 +48,7 @@ function installMyWaf {
 	wget https://raw.github.com/aNaoy/MyWaf/master/README.md
 	chmod +x mywaf.sh
 	cp mywaf.sh /usr/local/bin/
-	cd apwd
+	cd $apwd
 	echo "[**********************************]"
 	echo "[*] - Configuration et optimisation"
 	echo "[**********************************]"
