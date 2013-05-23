@@ -16,6 +16,7 @@ server {
 		CheckRule "$EVADE >= 4" BLOCK;
 		CheckRule "$XSS >= 8" BLOCK;
 		proxy_cache off;
+		proxy_set_header	HOST	$host;
 		proxy_pass http://VHOST.nginx_backend;
 		if ($request_method = HEAD) {
             return 200;
