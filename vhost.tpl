@@ -7,7 +7,7 @@ server {
 
 	location / {
 		#LearningMode;
-		#SecRulesEnabled;
+		SecRulesEnabled;
 		#SecRulesDisabled;
 		DeniedUrl "/RequestDenied";
 		CheckRule "$SQL >= 8" BLOCK;

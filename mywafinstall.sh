@@ -46,6 +46,8 @@ function installMyWaf {
 	wget https://raw.github.com/aNaoy/MyWaf/master/sysctl.conf
 	wget https://raw.github.com/aNaoy/MyWaf/master/vhost.tpl
 	wget https://raw.github.com/aNaoy/MyWaf/master/README.md
+	wget https://raw.github.com/aNaoy/MyWaf/master/naxsi_core.rules
+	cp naxsi_core.rules /etc/nginx/naxsi_core.rules
 	chmod +x mywaf.sh
 	cp mywaf.sh /usr/local/bin/
 	cd $apwd
@@ -67,6 +69,7 @@ function installMyWaf {
 		include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
 	sed -i '10 a\
 		proxy_cache_path /var/cache/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
+	/etc/init.d/nginx start
 }
 
 if [[ $EUID -ne 0 ]]; then
