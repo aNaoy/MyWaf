@@ -21,7 +21,7 @@ function installMyWaf {
 	echo \n\n\n\n"[***********************************************]"
     echo "[*] - Installation des packages d'administration"
 	echo "[***********************************************]"
-	apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap nfs-server && apt-get install -y libfile-tail-perl && apt-get -y install python-dev python-pip && pip install glances
+	apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap && apt-get -y install python-dev python-pip && pip install glances
     # optimisations
 	echo \n\n\n\n"[**************************]"
     echo "[*] - Optimisations systeme"
@@ -34,7 +34,9 @@ function installMyWaf {
     echo "deb http://ftp.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
     apt-get update  
     apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
+	echo \n\n\n\n"[**************************]"
 	echo "[*] - Installation de MyWaf"
+	echo "[**************************]"
 	if [ ! -d /usr/local/mywaf ]; then
 		mkdir -p /usr/local/mywaf
 	fi
@@ -47,7 +49,9 @@ function installMyWaf {
 	chmod +x mywaf.sh
 	cp mywaf.sh /usr/local/bin/
 	cd apwd
+	echo \n\n\n\n"[**********************************]"
 	echo "[*] - Configuration et optimisation"
+	echo "[**********************************]"
 	# Optimisation de nginx
     echo 'ULIMIT="-n 65536"' >> /etc/default/nginx
     ## Netfilter / FW / iptables
