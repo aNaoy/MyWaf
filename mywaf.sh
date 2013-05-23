@@ -18,8 +18,9 @@ function usage {
 }
 
 function addVhost {
-    sed s/VHOST/$1 /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1
-    sed -i s/IP/$2 /etc/nginx/sites-available/$1
+    sed s/VHOST/$1/ /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1
+    sed -i s/IP/$2/ /etc/nginx/sites-available/$1
+	ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 		/etc/init.d/nginx reload
@@ -28,6 +29,7 @@ function addVhost {
 
 function delVhost {
     rm /etc/nginx/sites-available/$1
+    rm /etc/nginx/sites-enabled/$1
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 		/etc/init.d/nginx reload
