@@ -62,6 +62,11 @@ function installMyWaf {
     hostname > /etc/hostname
     ## Ajout de la whitelist WAF
     echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
+	# Configuration d'Nginx
+	sed -i '10 a\
+		include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
+	sed -i '10 a\
+		proxy_cache_path /var/cache/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
 }
 
 if [[ $EUID -ne 0 ]]; then
