@@ -68,7 +68,7 @@ function installMyWaf {
 	sed -i '10 a\
 		include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
 	sed -i '10 a\
-		proxy_cache_path /var/cache/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
+		proxy_cache_path /var/cache/nginx/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
 	/etc/init.d/nginx start
 }
 
