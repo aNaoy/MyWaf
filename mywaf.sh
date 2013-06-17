@@ -17,7 +17,7 @@ function usage {
     echo "[*] MyWaf usage:"
     echo "[*] $0 [add VHOST IP | del VHOST]   Add/delete selected VHOST"
     echo "[*] $0 list                         List enabled VHOST"
-    echo "[*] $0 learn VHOST				  Set the VHOST in learning mode"
+    echo "[*] $0 learn VHOST		      Set the VHOST in learning mode"
 }
 
 function addVhost {
