@@ -41,15 +41,13 @@ function installMyWaf {
 	if [ ! -d /usr/local/mywaf ]; then
 		mkdir -p /usr/local/mywaf
 	fi
-	apwd=`pwd`
-	cd /usr/local/mywaf
 	wget https://raw.github.com/aNaoy/MyWaf/master/mywaf.sh
 	wget https://raw.github.com/aNaoy/MyWaf/master/sysctl.conf
 	wget https://raw.github.com/aNaoy/MyWaf/master/vhost.tpl
 	wget https://raw.github.com/aNaoy/MyWaf/master/README.md
 	wget https://raw.github.com/aNaoy/MyWaf/master/naxsi_core.rules
-	cp naxsi_core.rules /etc/nginx/naxsi_core.rules
-	chmod +x mywaf.sh
+	cp /usr/local/mywaf/naxsi_core.rules /etc/nginx/naxsi_core.rules
+	chmod +x /usr/local/mywaf/mywaf.sh
 	ln -s /usr/local/mywaf/mywaf.sh /usr/local/bin/mywaf
 	wget https://naxsi.googlecode.com/files/nx_util-1.0.tgz
 	tar xvzf nx_util-1.0.tgz
@@ -57,7 +55,6 @@ function installMyWaf {
 	chmod +x /usr/local/mywaf/nx_util.py
 	ln -s /usr/local/mywaf/nx_util.py /usr/local/bin/nx_util
 	wget https://raw.github.com/anaoy/mywaf/master/nx_util.conf
-	cd $apwd
 	echo "[***************************]"
 	echo "[*] - Configuration & tuning"
 	echo "[***************************]"
