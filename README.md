@@ -1,7 +1,7 @@
 MyWaf
 =====
 
-My enterprise open-source Web Application Framework
+My enterprise open-source Web Application Firewall
 
 
 0) License
@@ -16,5 +16,15 @@ You should have received a copy of the GNU General Public License along with MyW
 1) Overview
 -----------
 
-MyWaf is a set of scripts intended to ease the installation and configuration of a Web Application Firewall on a Linux/Debian distribution.
+MyWaf is a set of scripts intended to ease the installation and configuration of a Web Application Firewall on a Linux/Debian Wheezy distribution.
 
+2) Installation
+---------------
+
+In a shell:
+
+```bash
+$ wget https://raw.github.com/anaoy/mywaf/master/mywafinstall.sh
+$ chmod +x mywafinstall.sh
+$ sudo ./mywafinstall.sh
+```
