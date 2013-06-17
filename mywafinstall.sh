@@ -14,29 +14,29 @@
 # If not, see http://www.gnu.org/licenses/.
 
 function installMyWaf {
-	echo "[************************]"
-	echo "[*] Installation du WAF :"
-	echo "[************************]"
+	echo "[*********************]"
+	echo "[*]   WAF installation"
+	echo "[*********************]"
         # packages
-	echo "[***********************************************]"
-	echo "[*] - Installation des packages d'administration"
-	echo "[***********************************************]"
+	echo "[*********************]"
+	echo "[*] - Packages install"
+	echo "[*********************]"
 	apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap \
 	    && apt-get -y install python-dev python-pip && pip install glances
         # optimisations
-	echo "[**************************]"
-	echo "[*] - Optimisations systeme"
-	echo "[**************************]"
+	echo "[******************]"
+	echo "[*] - System tweaks" 
+	echo "[******************]"
 	echo "* - nofile 65536" > /etc/security/limits.conf
         # Nginx + Naxsi
-	echo "[**********************************]"
-	echo "[*] - Installation de nginx & naxsi"
-	echo "[**********************************]"
+	echo "[**************************]"
+	echo "[*] - Nginx & Naxsi install"
+	echo "[**************************]"
 	echo "deb http://ftp.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
 	apt-get update  
 	apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
 	echo "[**************************]"
-	echo "[*] - Installation de MyWaf"
+	echo "[*] - MyWaf command install"
 	echo "[**************************]"
 	if [ ! -d /usr/local/mywaf ]; then
 		mkdir -p /usr/local/mywaf
@@ -51,10 +51,14 @@ function installMyWaf {
 	cp naxsi_core.rules /etc/nginx/naxsi_core.rules
 	chmod +x mywaf.sh
 	ln -s /usr/local/mywaf/mywaf.sh /usr/local/bin/mywaf
+	wget https://naxsi.googlecode.com/files/nx_util-1.0.tgz
+	tar xvzf nx_util-1.0.tgz
+	chmod +x /usr/local/mywaf/nx_util-1.0/nx_util/nx_util.py
+	ln -s /usr/local/mywaf/nx_util-1.0/nx_util/nx_util.py /usr/local/bin/nx_util
 	cd $apwd
-	echo "[**********************************]"
-	echo "[*] - Configuration et optimisation"
-	echo "[**********************************]"
+	echo "[***************************]"
+	echo "[*] - Configuration & tuning"
+	echo "[***************************]"
 	# Optimisation de nginx
 	echo 'ULIMIT="-n 65536"' >> /etc/default/nginx
         # No DNS
@@ -74,7 +78,7 @@ function installMyWaf {
 }
 
 if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root" 1>&2
+    echo "This script must be run as root." 1>&2
     exit 1
 fi
 

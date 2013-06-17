@@ -15,9 +15,10 @@
 
 function usage {
     echo "[*] MyWaf usage:"
-    echo "[*] $0 [add VHOST IP | del VHOST]   Add/delete selected VHOST"
-    echo "[*] $0 list                         List enabled VHOST"
-    echo "[*] $0 learn VHOST		      Set the VHOST in learning mode"
+    echo "[*] $0 [add VHOST IP | del VHOST]       Add/delete selected VHOST"
+    echo "[*] $0 list                             List enabled VHOST"
+    echo "[*] $0 [learn VHOST | unlearn VHOST]    Enable/disable learning mode on the VHOST"
+    echo "[*] $0 understand VHOST                 Process whitelist from logs (CARE if you've ALREADY been ATTACKED!)"
 }
 
 function addVhost {
@@ -69,6 +70,13 @@ function stopLearn {
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
+    fi
+}
+
+function underStand {
+    if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+	echo "This VHOST does not exist."
+        exit 1
     fi
 }
 
