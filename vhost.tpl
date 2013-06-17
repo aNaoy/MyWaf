@@ -4,9 +4,9 @@ upstream VHOST.nginx_backend {
 
 server {
 	server_name VHOST;
-	
 	access_log /var/log/nginx/VHOST.access.log;
 	error_log /var/log/nginx/VHOST.error.log;
+	include /etc/nginx/VHOST.rules
 
 	location / {
 		#LearningMode;
@@ -42,8 +42,7 @@ server {
     }
 
 	location /RequestDenied {
-		return 444;    
-	}
+		return 444;}
 
 	error_page 500 502 503 504 /50x.html;
 	location = /50x.html {

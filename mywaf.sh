@@ -17,9 +17,13 @@ function usage {
 	echo "[*] MyWaf usage:"
     echo "[*] $0 [add VHOST IP | del VHOST]   Add/delete selected VHOST"
 	echo "[*] $0 list                         List enabled VHOST"
+	echo "[*] $0 learn VHOST				  Set the VHOST in learning mode"
 }
 
 function addVhost {
+	if [ ! -f /etc/nginx/$1.whitelist ]; then
+		> /etc/nginx/$1.whitelist
+	fi
     sed s/VHOST/$1/ /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1.mywaf
     sed -i s/IP/$2/ /etc/nginx/sites-available/$1.mywaf
 	ln -s /etc/nginx/sites-available/$1.mywaf /etc/nginx/sites-enabled/$1.mywaf
@@ -30,8 +34,38 @@ function addVhost {
 }
 
 function delVhost {
+	if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+		echo "This VHOST does not exist."
+		exit 1
+	fi
     rm /etc/nginx/sites-available/$1.mywaf
     rm /etc/nginx/sites-enabled/$1.mywaf
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+		/etc/init.d/nginx reload
+    fi
+}
+
+function startLearn {
+	if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+		echo "This VHOST does not exist."
+		exit 1
+	fi
+	sed '12 s/#//' /etc/nginx/sites-available/$1.mywaf
+	sed '41 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+		/etc/init.d/nginx reload
+    fi
+}
+
+function stopLearn {
+	if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+		echo "This VHOST does not exist."
+		exit 1
+	fi
+	sed '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
+	sed '41 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 		/etc/init.d/nginx reload
@@ -69,6 +103,13 @@ case "$1" in
 			usage
 		else
 			listVhost
+		fi
+		;;
+	'learn')
+		if [ $# -eq 2 ]; then
+			startLearn $2
+		else
+			usage
 		fi
 		;;
 	*)
