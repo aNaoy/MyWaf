@@ -53,8 +53,10 @@ function installMyWaf {
 	ln -s /usr/local/mywaf/mywaf.sh /usr/local/bin/mywaf
 	wget https://naxsi.googlecode.com/files/nx_util-1.0.tgz
 	tar xvzf nx_util-1.0.tgz
-	chmod +x /usr/local/mywaf/nx_util-1.0/nx_util/nx_util.py
-	ln -s /usr/local/mywaf/nx_util-1.0/nx_util/nx_util.py /usr/local/bin/nx_util
+	mv /usr/local/mywaf/nx_util-1.0/nx_util/* /usr/local/mywaf/
+	chmod +x /usr/local/mywaf/nx_util.py
+	ln -s /usr/local/mywaf/nx_util.py /usr/local/bin/nx_util
+	wget https://raw.github.com/anaoy/mywaf/master/nx_util.conf
 	cd $apwd
 	echo "[***************************]"
 	echo "[*] - Configuration & tuning"
@@ -67,9 +69,7 @@ function installMyWaf {
 	hostname MyWaf
 	echo "127.0.0.1 mywaf" >> /etc/hosts
 	hostname > /etc/hostname
-        ## Ajout de la whitelist WAF
-	echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
-	# Configuration d'Nginx
+ 	# Configuration d'Nginx
 	sed -i '10 a\
 	include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
 	sed -i '10 a\

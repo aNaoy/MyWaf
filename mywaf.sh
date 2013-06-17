@@ -78,6 +78,7 @@ function underStand {
 	echo "This VHOST does not exist."
         exit 1
     fi
+    nx_util -o -l /var/log/nginx/$1.error.log -c /usr/local/mywaf/nx_util.conf -d $1.db
 }
 
 function listVhost {
@@ -116,6 +117,13 @@ case "$1" in
     'learn')
 	if [ $# -eq 2 ]; then
 	    startLearn $2
+	else
+	    usage
+	fi
+	;;
+    'understand')
+	if [ $# -eq 2 ]; then
+	    understand $2
 	else
 	    usage
 	fi
