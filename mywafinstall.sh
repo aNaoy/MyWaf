@@ -49,7 +49,7 @@ function installMyWaf {
 	wget https://raw.github.com/aNaoy/MyWaf/master/naxsi_core.rules
 	cp naxsi_core.rules /etc/nginx/naxsi_core.rules
 	chmod +x mywaf.sh
-	cp mywaf.sh /usr/local/bin/
+	ln -s /usr/local/mywaf/mywaf.sh /usr/local/bin/mywaf
 	cd $apwd
 	echo "[**********************************]"
 	echo "[*] - Configuration et optimisation"
@@ -66,9 +66,9 @@ function installMyWaf {
     echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
 	# Configuration d'Nginx
 	sed -i '10 a\
-		include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
+	include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
 	sed -i '10 a\
-		proxy_cache_path /var/cache/nginx/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
+	proxy_cache_path /var/cache/nginx/ levels=1:2 keys_zone=big:10m max_size=2G;' /etc/nginx/nginx.conf
 	/etc/init.d/nginx start
 }
 

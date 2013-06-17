@@ -14,13 +14,15 @@
 # If not, see http://www.gnu.org/licenses/.
 
 function usage {
-    echo "$0 [add VHOST IP | del VHOST]"
+	echo "[*] MyWaf usage:"
+    echo "[*] $0 [add VHOST IP | del VHOST]   Add/delete selected VHOST"
+	echo "[*] $0 list                         List enabled VHOST"
 }
 
 function addVhost {
-    sed s/VHOST/$1/ /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1
-    sed -i s/IP/$2/ /etc/nginx/sites-available/$1
-	ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
+    sed s/VHOST/$1/ /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1.mywaf
+    sed -i s/IP/$2/ /etc/nginx/sites-available/$1.mywaf
+	ln -s /etc/nginx/sites-available/$1.mywaf /etc/nginx/sites-enabled/$1.mywaf
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 		/etc/init.d/nginx reload
@@ -28,12 +30,23 @@ function addVhost {
 }
 
 function delVhost {
-    rm /etc/nginx/sites-available/$1
-    rm /etc/nginx/sites-enabled/$1
+    rm /etc/nginx/sites-available/$1.mywaf
+    rm /etc/nginx/sites-enabled/$1.mywaf
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 		/etc/init.d/nginx reload
     fi
+}
+
+function listVhost {
+	if [ -f /etc/nginx/sites-available/*.mywaf ]; then
+		echo "[*] VHOST list:"
+		for f in /etc/nginx/sites-available/*.mywaf; do
+			echo $f | cut -d/ -f5 | cut -d. -f1
+		done
+	else
+		echo "[*] No VHOST configured on this WAF"
+	fi
 }
 
 case "$1" in
@@ -47,11 +60,18 @@ case "$1" in
     'del')
 		if [ $# -eq 2 ]; then
 				delVhost $2
-			else
+		else
 			usage
 		fi
 		;;
-      *)
+	'list')
+		if [ $# -gt 1 ]; then
+			usage
+		else
+			listVhost
+		fi
+		;;
+	*)
         usage
         ;;
 esac
