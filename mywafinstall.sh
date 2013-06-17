@@ -15,25 +15,26 @@
 
 function installMyWaf {
 	echo "[************************]"
-    echo "[*] Installation du WAF :"
+	echo "[*] Installation du WAF :"
 	echo "[************************]"
-    # packages
+        # packages
 	echo "[***********************************************]"
-    echo "[*] - Installation des packages d'administration"
+	echo "[*] - Installation des packages d'administration"
 	echo "[***********************************************]"
-	apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap && apt-get -y install python-dev python-pip && pip install glances
-    # optimisations
+	apt-get update && apt-get -y purge exim4-base exim4-config exim4-daemon-light && apt-get install -y tcpdump portmap \
+	    && apt-get -y install python-dev python-pip && pip install glances
+        # optimisations
 	echo "[**************************]"
-    echo "[*] - Optimisations systeme"
+	echo "[*] - Optimisations systeme"
 	echo "[**************************]"
-    echo "* - nofile 65536" > /etc/security/limits.conf
-    # Nginx + Naxsi
+	echo "* - nofile 65536" > /etc/security/limits.conf
+        # Nginx + Naxsi
 	echo "[**********************************]"
-    echo "[*] - Installation de nginx & naxsi"
+	echo "[*] - Installation de nginx & naxsi"
 	echo "[**********************************]"
-    echo "deb http://ftp.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
-    apt-get update  
-    apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
+	echo "deb http://ftp.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
+	apt-get update  
+	apt-get -y --force-yes -t wheezy-backports install nginx-naxsi
 	echo "[**************************]"
 	echo "[*] - Installation de MyWaf"
 	echo "[**************************]"
@@ -55,15 +56,15 @@ function installMyWaf {
 	echo "[*] - Configuration et optimisation"
 	echo "[**********************************]"
 	# Optimisation de nginx
-    echo 'ULIMIT="-n 65536"' >> /etc/default/nginx
-    # No DNS
-    update-rc.d bind9 remove
-    # Hostname
-    hostname MyWaf
-    echo "127.0.0.1 mywaf" >> /etc/hosts
-    hostname > /etc/hostname
-    ## Ajout de la whitelist WAF
-    echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
+	echo 'ULIMIT="-n 65536"' >> /etc/default/nginx
+        # No DNS
+	update-rc.d bind9 remove
+        # Hostname
+	hostname MyWaf
+	echo "127.0.0.1 mywaf" >> /etc/hosts
+	hostname > /etc/hostname
+        ## Ajout de la whitelist WAF
+	echo "127.0.0.1" > /usr/local/etc/waf_whitelist.txt
 	# Configuration d'Nginx
 	sed -i '10 a\
 	include /etc/nginx/naxsi_core.rules;' /etc/nginx/nginx.conf
@@ -73,8 +74,8 @@ function installMyWaf {
 }
 
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
+    echo "This script must be run as root" 1>&2
+    exit 1
 fi
 
 installMyWaf
