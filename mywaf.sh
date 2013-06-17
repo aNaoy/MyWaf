@@ -52,7 +52,7 @@ function startLearn {
 	exit 1
     fi
     sed '12 s/#//' /etc/nginx/sites-available/$1.mywaf
-    sed '41 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
+    sed '45 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
@@ -65,7 +65,7 @@ function stopLearn {
 	exit 1
     fi
     sed '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
-    sed '41 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
+    sed '45 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
