@@ -6,9 +6,9 @@ server {
 	server_name VHOST;
 	access_log /var/log/nginx/VHOST.access.log;
 	error_log /var/log/nginx/VHOST.error.log;
-	include /etc/nginx/VHOST.whitelist;
 
 	location / {
+		 include /etc/nginx/VHOST.whitelist;
 		 #LearningMode;
 		 SecRulesEnabled;
 		 #SecRulesDisabled;
