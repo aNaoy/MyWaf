@@ -90,8 +90,7 @@ function startStrictLearn {
     fi
     sed -i '12 s/#//' /etc/nginx/sites-available/$1.mywaf
     sed -i '45 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
-    sed -i '13 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
-    sed -i '14 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '12 s/inc/#inc/' /etc/nginx/nginx.conf
     echo "[*] Strict learning mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
@@ -106,8 +105,7 @@ function stopStrictLearn {
     fi
     sed -i '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
     sed -i '45 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
-    sed -i '13 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
-    sed -i '14 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed-i '12 s/#inc/inc/' /etc/nginx/nginx.conf
     echo "[*] Basic mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
