@@ -54,7 +54,7 @@ function installMyWaf {
 	mv /usr/local/mywaf/nx_util-1.0/nx_util/* /usr/local/mywaf/
 	chmod +x /usr/local/mywaf/nx_util.py
 	ln -s /usr/local/mywaf/nx_util.py /usr/local/bin/nx_util
-	wget -P /usr/local/mywaf https://raw.github.com/anaoy/mywaf/master/nx_util.conf
+	wget -O /usr/local/mywaf/nx_util.conf https://raw.github.com/anaoy/mywaf/master/nx_util.conf
 	echo "[***************************]"
 	echo "[*] - Configuration & tuning"
 	echo "[***************************]"
