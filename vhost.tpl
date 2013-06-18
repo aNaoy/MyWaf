@@ -42,7 +42,9 @@ server {
 	}
 
 	location /RequestDenied {
-		 return 444;}
+		 #proxy_pass http://VHOST.nginx_backend;
+		 return 444;
+}
 
 	error_page 500 502 503 504 /50x.html;
 	location = /50x.html {
