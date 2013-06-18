@@ -129,7 +129,7 @@ function strictMode {
     fi
 }
 
-function strictMode {
+function basicMode {
     if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
         echo "[*] This VHOST does not exist."
         exit 1
@@ -165,8 +165,6 @@ function listVhost {
 	echo "[*] No VHOST configured on this WAF."
     fi
 }
-
-function 
 
 case "$1" in
     'add')
