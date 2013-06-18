@@ -17,17 +17,25 @@ function usage {
     echo "[*] MyWaf usage:"
     echo "[*] $0 [add VHOST IP | del VHOST]       Add/delete selected VHOST"
     echo "[*] $0 list                             List enabled VHOST"
-    echo "[*] $0 [learn VHOST | unlearn VHOST]    Enable/disable learning mode on the VHOST"
+    echo "[*] $0 [learn VHOST | stoplearn VHOST]  Enable/disable learning mode on VHOST"
     echo "[*] $0 understand VHOST                 Process whitelist from logs (CARE if you've ALREADY been ATTACKED!)"
+    echo "[*] $0 [strictlearn VHOST | stopstrictlearn VHOST]"
+    echo "[*]                                     Enable/disable strict learning mode on VHOST"
+    echo "[*] $0 [strict VHOST | unstrict VHOST]  Enable/disable strict mode on VHOST"
 }
 
 function addVhost {
+    if [ -f /etc/nginx/sites-available/$1.mywaf ]; then
+	echo "[*] This VHOST already exists."
+	exit 1
+    fi
     if [ ! -f /etc/nginx/$1.whitelist ]; then
 	> /etc/nginx/$1.whitelist
     fi
     sed s/VHOST/$1/ /usr/local/mywaf/vhost.tpl > /etc/nginx/sites-available/$1.mywaf
     sed -i s/IP/$2/ /etc/nginx/sites-available/$1.mywaf
     ln -s /etc/nginx/sites-available/$1.mywaf /etc/nginx/sites-enabled/$1.mywaf
+    echo "[*] VHOST $1 added in basic mode."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
@@ -36,7 +44,7 @@ function addVhost {
 
 function delVhost {
     if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
-	echo "This VHOST does not exist."
+	echo "[*] This VHOST does not exist."
 	exit 1
     fi
     rm /etc/nginx/sites-available/$1.mywaf
@@ -49,11 +57,12 @@ function delVhost {
 
 function startLearn {
     if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
-	echo "This VHOST does not exist."
+	echo "[*] This VHOST does not exist."
 	exit 1
     fi
-    sed '12 s/#//' /etc/nginx/sites-available/$1.mywaf
-    sed '45 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '12 s/#//' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Learning mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
@@ -62,23 +71,88 @@ function startLearn {
 
 function stopLearn {
     if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
-	echo "This VHOST does not exist."
+	echo "[*] This VHOST does not exist."
 	exit 1
     fi
-    sed '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
-    sed '45 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Basic mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
 	/etc/init.d/nginx reload
     fi
 }
 
-function underStand {
+function startStrictLearn {
     if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
-	echo "This VHOST does not exist."
+	echo "[*] This VHOST does not exist."
         exit 1
     fi
-    nx_util -o -l /var/log/nginx/$1.error.log -c /usr/local/mywaf/nx_util.conf -d $1.db
+    sed -i '12 s/#//' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/return 444/proxy_pass http:\/\/$1.nginx_backend/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '13 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '14 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Strict learning mode enabled."
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+        /etc/init.d/nginx reload
+    fi
+}
+
+function stopStrictLearn {
+    if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+        echo "[*] This VHOST does not exist."
+        exit 1
+    fi
+    sed -i '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/proxy_pass http:\/\/$1.nginx_backend/return 444/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '13 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '14 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Basic mode enabled."
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+        /etc/init.d/nginx reload
+    fi
+}
+
+function strictMode {
+    if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+        echo "[*] This VHOST does not exist."
+        exit 1
+    fi
+    sed -i '13 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '14 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Strict mode enabled."
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+        /etc/init.d/nginx reload
+    fi
+}
+
+function strictMode {
+    if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+        echo "[*] This VHOST does not exist."
+        exit 1
+    fi
+    sed -i '13 s/#Sec/Sec/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '14 s/Sec/#Sec/' /etc/nginx/sites-available/$1.mywaf
+    echo "[*] Basic mode enabled."
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+        /etc/init.d/nginx reload
+    fi
+}
+
+function underStand {
+    if [ ! -f /etc/nginx/sites-available/$1.mywaf ]; then
+	echo "[*] This VHOST does not exist."
+        exit 1
+    fi
+    nx_util -o -l /var/log/nginx/$1.error.log -c /usr/local/mywaf/nx_util.conf -d $1.db >> /etc/nginx/$1.whitelist
+    /etc/init.d/nginx configtest
+    if [ $? -eq 0 ]; then
+        /etc/init.d/nginx reload
+    fi
 }
 
 function listVhost {
@@ -88,9 +162,11 @@ function listVhost {
 	    echo $f | cut -d/ -f5 | cut -d. -f1
 	done
     else
-	echo "[*] No VHOST configured on this WAF"
+	echo "[*] No VHOST configured on this WAF."
     fi
 }
+
+function 
 
 case "$1" in
     'add')
@@ -108,7 +184,7 @@ case "$1" in
 	fi
 	;;
     'list')
-	if [ $# -gt 1 ]; then
+	if [ $# -ne 1 ]; then
 	    usage
 	else
 	    listVhost
@@ -121,13 +197,48 @@ case "$1" in
 	    usage
 	fi
 	;;
+    'stoplearn')
+        if [ $# -eq 2 ]; then
+            stopLearn $2
+        else
+            usage
+        fi
+        ;;
     'understand')
 	if [ $# -eq 2 ]; then
-	    understand $2
+	    underStand $2
 	else
 	    usage
 	fi
 	;;
+    'strictlearn')
+        if [ $# -eq 2 ]; then
+            startStrictLearn $2
+        else
+            usage
+        fi
+        ;;
+    'stopstrictlearn')
+	if [ $# -eq 2 ]; then
+            stopStrictLearn $2
+        else
+            usage
+        fi
+        ;;
+    'strict')
+        if [ $# -eq 2 ]; then
+            strictMode $2
+	else
+            usage
+	fi
+        ;;
+    'unstrict')
+	if [ $# -eq 2 ]; then
+            basicMode $2
+        else
+            usage
+        fi
+        ;;
     *)
         usage
         ;;
