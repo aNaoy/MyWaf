@@ -159,7 +159,8 @@ function listVhost {
     if [ -f /etc/nginx/sites-available/*.mywaf ]; then
 	echo "[*] VHOST list:"
 	for f in /etc/nginx/sites-available/*.mywaf; do
-	    echo $f | cut -d/ -f5 | cut -d. -f1
+	    temp=`echo $f | cut -d/ -f5`
+	    echo ${temp%.mywaf}
 	done
     else
 	echo "[*] No VHOST configured on this WAF."
