@@ -58,8 +58,8 @@ function startLearn {
 	exit 1
     fi
     sed -i '12 s/#//' /etc/nginx/sites-available/$1.mywaf
-    sed -i '45 s/#pro/pro' /etc/nginx/sites-available/$1.mywaf
-    sed -i '46 s/ret/#ret' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/#pro/pro/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '46 s/ret/#ret/' /etc/nginx/sites-available/$1.mywaf
     echo "[*] Learning mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
@@ -73,8 +73,8 @@ function stopLearn {
 	exit 1
     fi
     sed -i '12 s/Lea/#Lea/' /etc/nginx/sites-available/$1.mywaf
-    sed -i '45 s/pro/#pro' /etc/nginx/sites-available/$1.mywaf
-    sed -i '46 s/#ret/ret' /etc/nginx/sites-available/$1.mywaf
+    sed -i '45 s/pro/#pro/' /etc/nginx/sites-available/$1.mywaf
+    sed -i '46 s/#ret/ret/' /etc/nginx/sites-available/$1.mywaf
     echo "[*] Basic mode enabled."
     /etc/init.d/nginx configtest
     if [ $? -eq 0 ]; then
