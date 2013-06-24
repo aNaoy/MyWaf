@@ -46,6 +46,7 @@ function installMyWaf {
 	wget -P /usr/local/mywaf https://raw.github.com/aNaoy/MyWaf/master/vhost.tpl
 	wget -P /usr/local/mywaf https://raw.github.com/aNaoy/MyWaf/master/README.md
 	wget -P /usr/local/mywaf https://raw.github.com/aNaoy/MyWaf/master/naxsi_core.rules
+	wget -P /usr/local/mywaf https://raw.github.com/aNaoy/MyWaf/master/LICENSE
 	cp /usr/local/mywaf/naxsi_core.rules /etc/nginx/naxsi_core.rules
 	chmod +x /usr/local/mywaf/mywaf.sh
 	ln -s /usr/local/mywaf/mywaf.sh /usr/local/bin/mywaf
