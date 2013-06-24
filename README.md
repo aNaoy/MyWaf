@@ -40,3 +40,12 @@ In order to have a working WAF, you have to:
 5. Understand the rules
 6. You're done!
 
+```bash
+MyWaf usage:
+------------
+
+mywaf [add VHOST IP | del VHOST]       Add/delete selected VHOST
+mywaf list                             List enabled VHOST
+mywaf [learn VHOST | stoplearn VHOST]  Enable/disable learning mode on VHOST
+mywaf understand VHOST                 Process whitelist from logs (CARE if you've ALREADY been ATTACKED!)
+```
