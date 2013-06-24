@@ -33,11 +33,17 @@ $ sudo ./mywafinstall.sh
 --------
 
 In order to have a working WAF, you have to:
+
 1. Add a VHOST
+
 2. Start learning mode on this VHOST
+
 3. Make every legit user inputs possible on the site (modifying hosts file, we recommand to publish DNS entry after the whole process)
+
 4. Stop learning mode on the VHOST
+
 5. Understand the rules
+
 6. You're done!
 
 ```bash
