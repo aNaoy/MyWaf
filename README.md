@@ -38,7 +38,7 @@ In order to have a working WAF, you have to:
 
 2. Start learning mode on this VHOST
 
-3. Make every legit user inputs possible on the site (modifying hosts file, we recommand to publish DNS entry after the whole process)
+3. Make every legit user inputs possible on the site (modifying hosts file, we recommend to publish DNS entry after the whole process)
 
 4. Stop learning mode on the VHOST
 
