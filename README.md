@@ -47,5 +47,6 @@ MyWaf usage:
 mywaf [add VHOST IP | del VHOST]       Add/delete selected VHOST
 mywaf list                             List enabled VHOST
 mywaf [learn VHOST | stoplearn VHOST]  Enable/disable learning mode on VHOST
-mywaf understand VHOST                 Process whitelist from logs (CARE if you've ALREADY been ATTACKED!)
+mywaf understand VHOST                 Process whitelist from logs (CARE if you've 
+      		 		       ALREADY been ATTACKED!)
 ```
