@@ -24,9 +24,9 @@ MyWaf is a set of scripts intended to ease the installation and configuration of
 In a shell:
 
 ```bash
-$ wget https://raw.github.com/anaoy/mywaf/master/mywafinstall.sh
-$ chmod +x mywafinstall.sh
-$ sudo ./mywafinstall.sh
+wget https://raw.github.com/anaoy/mywaf/master/mywafinstall.sh
+chmod +x mywafinstall.sh
+sudo ./mywafinstall.sh
 ```
 
 3) Usage
